@@ -86,20 +86,17 @@ int writeDisk(int logicalBlockNum, int numOfSectors, void *buffer)
     }
 
     return 0;
-
-    return 0;
 }
 
-int main(int argc, char *argv[])
+
+/*int main(int argc, char *argv[])
 {
     // TODO: extend to also test for reading and writing
     
     physaddr_t phaddr;
 
     char buf[8 * SECT_SIZE];
-
     int logaddr;
-
     if (argc < 2)
         while (1)
         {
@@ -136,4 +133,4 @@ int main(int argc, char *argv[])
             printTransl(logaddr);
             break;
     }
-}
+}*/

@@ -1,10 +1,7 @@
 #include <sys/signal.h>
 #include <time.h>
 #include <sys/time.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#include "disk.h"
 
 #define COUNTDOWN_VALUE 10
 
@@ -57,9 +54,36 @@ void timer_callback(int sig)
     count--;
 }
 
+
+char *generateContent(int size)
+{
+    char *content = malloc(size);
+
+    int firstPrintable = ' ';
+    int len = '~' - firstPrintable;
+
+    for (int i = 0; i < size - 1; i++)
+        *(content + i) = firstPrintable + rand() % len;
+
+    content[size - 1] = '\0';
+    return content;
+}
+
+int genRandomNum(int lower, int upper)
+{
+        int num = (rand() %
+                   (upper - lower + 1)) + lower;
+        return num;
+}
 int main(int ac, char **av)
 {
+    int size;
+    char *buf = malloc(8 * SECT_SIZE);
     (void) signal(SIGALRM, timer_callback);
     start_timer();
+    size = genRandomNum(0,SECT_SIZE);
+    buf = generateContent(size);
+
     while (count >= 0);
 }
+

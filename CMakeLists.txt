@@ -14,3 +14,5 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 add_executable(disk disk.c timer_posix.c)
+
+target_link_libraries(disk rt)
