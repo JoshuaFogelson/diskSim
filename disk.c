@@ -39,17 +39,53 @@ void printTransl(int logaddr)
         printf("ERROR: invalid logical address!\n");
 }
 
+void copy(char *dest, const char * src, int size)
+{
+    for (int i = 0; i < size; ++i) {
+        dest[i] = src[i];
+    }
+}
+
 int readDisk(int logical_block_num, int numOfBlocks, void **buffer)
 {
     // TODO: implement
-    char* strcppy = malloc(numOfBlocks* sizeof(char) * SECT_SIZE);
+    if (logical_block_num < 0)
+        return -1;
+    if (logical_block_num + numOfBlocks < MAX_LOGICAL_SECTOR)
+        return 0;
 
+    physaddr_t phyaddr;
+    for (int i = 0; i < numOfBlocks; ++i)
+    {
+        log2phys(logical_block_num + i, &phyaddr);
+
+        char* buff = (*buffer);
+        copy(&buff[i*SECT_SIZE], disk[phyaddr.cyl][phyaddr.head][phyaddr.sect],SECT_SIZE);
+    }
     return 0;
 }
 
 int writeDisk(int logicalBlockNum, int numOfSectors, void *buffer)
 {
     // TODO: implement
+
+    if (logicalBlockNum < 0)
+        return -1;
+    if (logicalBlockNum + numOfSectors < MAX_LOGICAL_SECTOR)
+        return 0;
+    // create physical address object
+    physaddr_t phyaddr = {};
+    for(int i = 0; i < numOfSectors; ++i)
+    {
+        log2phys(logicalBlockNum, &phyaddr);
+
+        // Array type 'sector_t(aka 'char[1280]' is not assignable
+        // Subscript of a pointer to a void is a GNU exception
+        char* buff = (buffer);
+        copy(disk[phyaddr.cyl][phyaddr.head][phyaddr.sect],buff,SECT_SIZE);
+    }
+
+    return 0;
 
     return 0;
 }
