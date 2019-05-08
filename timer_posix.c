@@ -11,6 +11,8 @@
 timer_t gTimerid;
 int count = COUNTDOWN_VALUE;
 
+void testDisk();
+
 void start_timer(void)
 {
     struct itimerspec value;
@@ -52,37 +54,17 @@ void timer_callback(int sig)
     gettimeofday(&ts, NULL); // man gettimeofday
     printf("Time: %ld.%06ld secs.\n\n", (long)ts.tv_sec, (long)ts.tv_usec);
     count--;
+    testDisk();
 }
 
 
-char *generateContent(int size)
-{
-    char *content = malloc(size);
 
-    int firstPrintable = ' ';
-    int len = '~' - firstPrintable;
-
-    for (int i = 0; i < size - 1; i++)
-        *(content + i) = firstPrintable + rand() % len;
-
-    content[size - 1] = '\0';
-    return content;
-}
-
-int genRandomNum(int lower, int upper)
-{
-        int num = (rand() %
-                   (upper - lower + 1)) + lower;
-        return num;
-}
 int main(int ac, char **av)
 {
-    int size;
-    char *buf = malloc(8 * SECT_SIZE);
+
     (void) signal(SIGALRM, timer_callback);
     start_timer();
-    size = genRandomNum(0,SECT_SIZE);
-    buf = generateContent(size);
+
 
     while (count >= 0);
 }

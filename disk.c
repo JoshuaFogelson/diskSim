@@ -88,18 +88,39 @@ int writeDisk(int logicalBlockNum, int numOfSectors, void *buffer)
     return 0;
 }
 
+char *generateContent(int size)
+{
+    char *content = malloc(size);
 
-/*int main(int argc, char *argv[])
+    int firstPrintable = ' ';
+    int len = '~' - firstPrintable;
+
+    for (int i = 0; i < size - 1; i++)
+        *(content + i) = firstPrintable + rand() % len;
+
+    content[size - 1] = '\0';
+    return content;
+}
+
+int genRandomNum(int lower, int upper)
+{
+    int num = (rand() %
+               (upper - lower + 1)) + lower;
+    return num;
+}
+
+void testDisk()
 {
     // TODO: extend to also test for reading and writing
-    
+
+    int size;
+    char *buf = malloc(8 * SECT_SIZE);
+    size = genRandomNum(0,SECT_SIZE);
+    buf = generateContent(size);
     physaddr_t phaddr;
 
-    char buf[8 * SECT_SIZE];
     int logaddr;
-    if (argc < 2)
-        while (1)
-        {
+
             logaddr = rand() % MAX_LOGICAL_SECTOR;
             printTransl(logaddr);
             switch (rand() % 2)
@@ -112,9 +133,9 @@ int writeDisk(int logicalBlockNum, int numOfSectors, void *buffer)
                     break;
             }
             usleep(10);
-        }
 
-    switch (argv[1][0]) // "l" for logical "p" for physical
+
+   /* switch (argv[1][0]) // "l" for logical "p" for physical
     {
         case 'l': // logical
             if (argv[2] == NULL)
@@ -132,5 +153,5 @@ int writeDisk(int logicalBlockNum, int numOfSectors, void *buffer)
             logaddr = phys2log(&phaddr);
             printTransl(logaddr);
             break;
-    }
-}*/
+    }*/
+}
